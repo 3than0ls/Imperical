@@ -77,4 +77,4 @@ if __name__ == '__main__':
             await ctx.send(bot.responses['not_allowed'][random.randint(0, len(bot.responses['not_allowed'])-1)])
             return False
 
-    bot.run('NzE3OTU1MTYwMDE3NDY5NTIx.Xth2Fw.dx3jNjoRKX_R9lAaxhSHhSK7Fb0')
+    bot.run('bot token')
