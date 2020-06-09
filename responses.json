@@ -1,0 +1,87 @@
+{
+    "default": {
+        "nickname_change": "Nickname was changed to {nickname}, resetting it.",
+        "not_allowed": [
+            "nigga get away", 
+            "dont try to touch my ass weirdo", 
+            "who said u could do that", 
+            "piss off fag", 
+            "didnt ask you, did i?",
+            "try one more time and i swear to fuck i'll ban u",
+            "gtfo incel dont wanna talk to u",
+            "simp for someone else, but not me, loser",
+            "wank off u twat"
+        ],
+        "missing_arg": "Missing argument {arg}.",
+        "profile": {
+            "profile_everyone": {
+                "success": "Created {created_amount} profiles and replaced {replaced_amount} pre-existing profiles.",
+                "fail": "No profiles were created."
+            },
+            "create_profile": {
+                "invalid_source": "{source} is not a role or member, skipping.",
+                "success": "Added {roles} to the profile {name}.",
+                "fail": "No valid role sources were provided, so no profile was created.",
+                "replace": "Profile {name} already exists, and will be replaced."
+            },
+            "delete_profile": {
+                "success": "Deleted {profile} from list of profiles.",
+                "fail": "Profile {profile} does not exist."
+            },
+            "clear_profiles": {
+                "success": "Deleted all profiles in profiles list.",
+                "fail": "No profiles exist to delete."
+            },
+            "add_profile": {
+                "skip": "{name} already has the {role} role from profile {profile}.",
+                "remove": "{not_found_role_id} was not found as a role in the server, and was removed from the profile.",
+                "assigned_total": "Assigned a total of {amount} roles to member {name}.",
+                "fail": "Profile {profile} could not be found.",
+                "success": "Successfully assigned profile."
+            },
+            "remove_profile": {
+                "skip": "{name} already doesn't has the {role} role from profile {profile}.",
+                "remove": "{not_found_role_id} was not found as a role in the server, and was removed from the profile.",
+                "removed_total": "Removed a total of {amount} roles from member {name}.",
+                "fail": "Profile {profile} could not be found.",
+                "success": "Successfully removed profile."
+            }
+        },
+        "archive": {
+            "archive": {
+                "fail": "{category_name} is not a valid category name.",
+                "success": "Archived channel {name} in {category_name}."
+            },
+            "reopen": {
+                "fail": "{category_name} is not a valid category name.",
+                "success": "Re-opened channel {name} in {category_name}."
+            }
+        },
+        "jail": {
+            "jail": {
+                "success": "Jailed {members} to jail role {jail_role}."
+            },
+            "create_jail": {
+                "success": "{role_name} has been restricted to only see {jail_channel}"
+            },
+            "free_jail": {
+                "success": "{name} has had all their channel overwrites removed."
+            }
+        },
+        "settings": {
+            "set_prefix": {
+                "fail": "{new_prefix} is already the bot prefix.",
+                "success": "Changed prefix from {prefix} to {new_prefix}"
+            },
+            "allow_access": {
+                "fail": "Something went wrong (either you listed no one, or the person you listed already has access).",
+                "success": "Allowed access for {amount} user(s)."
+            },
+            "deny_access": {
+                "treachery": "Nice try, but I'm no deviant. Enjoy a permission-less lifestyle.",
+                "fail": "Something went wrong (either you listed no one, or the person you listed already doesn't have access).",
+                "success": "Denied access for {amount} user(s)."
+            }
+        }
+    }
+}

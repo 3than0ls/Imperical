@@ -1,0 +1,92 @@
+{
+    "default": {
+        "nickname_change": ["Nickname was changed to {nickname}, resetting it."],
+        "not_allowed": ["You're not allowed to access commands."],
+        "missing_arg": ["Missing argument {arg}"],
+        "create_profile": {
+            "not_source": ["{source} is not a role or member, skipping."],
+            "add_roles": ["Added {roles} to the profile {name}."],
+            "no_valid_sources": ["No valid sources were provided, so no profile was created."]
+        },
+        "set_prefix": {
+            "already_prefix": ["{new_prefix} is already the bot prefix."],
+            "changed": ["Changed prefix from {prefix} to {new_prefix}"]
+        },
+        "create_role": {
+            "created": ["Role {mention} was created."]
+        },
+        "free": {
+            "changed": ["{mention} has had all channel overwrite permissions deleted."]
+        },
+        "jail": {
+            "changed": ["{mention} has been restricted to only see {jail_channel}."]
+        },
+        "add_profile": {
+            "skip_add": ["{name} already has role {role} in the {profile} profile, skipping."],
+            "remove": ["Role with ID {not_found_role_id} could not be found, and was removed from profile {profile}."],
+            "assigned_total": ["Assigned {amount} total roles to {name}."],
+            "not_found": ["{profile} was not found in the list of profiles."]
+        },
+        "remove_profile": {
+            "skip_remove": ["{name} does not have role {role} in the {profile} profile, skipping."],
+            "remove": ["Role with ID {not_found_role_id} could not be found, and was removed from profile {profile}."],
+            "removed_total": ["Removed {amount} total roles from {name}."],
+            "not_found": ["{profile} was not found in the list of profiles."]
+        },
+        "reopen": {
+            "invalid_category_name": ["{joined_category_name} is not a valid category name."],
+            "reopened": ["Re-opened channel {name} in {joined_category_name}."],
+            "incorrect_args": ["Did not pass correct arguments."]
+        },
+        "archive": {
+            "invalid_category_name": ["{joined_category_name} is not a valid category name."],
+            "archived": ["Archived channel {name} in {joined_category_name}."],
+            "incorrect_args": ["Did not pass correct arguments."]
+        }
+    },
+    "jogger": {
+        "nickname_change": ["who fucked with my street name, i aint no {nickname}, i swear to god imma fuck u up nigga"],
+        "not_allowed": ["nigga who the fuck said you were allowed to touch this shit try that shit one more time and imma show it to you"],
+        "missing_arg": ["bruh homie your missing {arg} from whateva the fuck you were tryna do"],
+        "create_profile": {
+            "not_source": ["bruh what the fuck is a {source} you good man?"],
+            "add_roles": ["gave my homie dog {name} some {roles} and a pound of cocaine"],
+            "no_valid_sources": ["you fucked it up, so i aint doin jackshit"]
+        },
+        "set_prefix": {
+            "already_prefix": ["are you stupid or somethin {new_prefix} is already the fuckin prefix??"],
+            "changed": ["mah nigga, i've changed the prefix from {prefix} to {new_prefix}, i'm feelin good about this"]
+        },
+        "create_role": {
+            "created": ["me and my friend tyrone slapped together this role {mention} in our free time, have it yeah?"]
+        },
+        "free": {
+            "changed": ["YEAH! WE FREED {mention} FROM JAIL! FUCK THE POLICE! WOOOO!"]
+        },
+        "jail": {
+            "changed": ["you seein this shit man? they threw tyrone in {jail_channel} jail. shits gettin serious, man"]
+        },
+        "add_profile": {
+            "skip_add": ["{name} already be doin {role}, along with cocaine and {profile} shit. we skipping on that nasty shit."],
+            "remove": ["what the fuck is a {not_found_role_id}? couldn't find that shit in {profile}, so we takin it out."],
+            "assigned_total": ["yuhhhh, {name} smoked {amount} pounds of weed, goddamn boy"],
+            "not_found": ["the fuck is a {profile}?"]
+        },
+        "remove_profile": {
+            "skip_remove": ["{name} already be doin {role}, along with cocaine and {profile} shit. we skipping on that nasty shit."],
+            "remove": ["what the fuck is a {not_found_role_id}? couldn't find that shit in {profile}, so we takin it out."],
+            "removed_total": ["some nigga stole {amount} grand from {name}, cmon we gotta find him and beat the shit outta him man"],
+            "not_found": ["the fuck is a {profile}?"]
+        },
+        "reopen": {
+            "invalid_category_name": ["the fuck is {joined_category_name}?"],
+            "reopened": ["nice try but i gave up ten minutes ago on this im not black but reopened {name} in {joined_category_name}"],
+            "incorrect_args": ["didnt pass correct args man"]
+        },
+        "archive": {
+            "invalid_category_name": ["the fuck is {joined_category_name}?"],
+            "archived": ["nice try but i gave up ten minutes ago on this im not black but archived {name} in {joined_category_name}"],
+            "incorrect_args": ["didnt pass correct args man"]
+        }
+    }
+}
