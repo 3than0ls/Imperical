@@ -1,51 +1,92 @@
 from discord.ext import commands
 import discord
 import json
-from inspect import stack
-from utils import make_clever_looking, responses
+from checks import Checks
+from utils import get_servers_data, set_servers_data
 
-class ArchiveManager(commands.Cog):    
-    def __init__(self, responses):
-        super().__init__()
-        self.responses = responses
+class Archive(commands.Cog):    
+    def __init__(self):
+        self.update_response()
 
-    
-    @commands.command()
-    async def reopen(self, ctx, channel: discord.TextChannel, *category_name):
+    def update_response(self):
+        with open("info/responses.json", "r") as f:
+            self.responses = json.load(f)
+
+    @Checks.permissions_check()
+    @commands.command(aliases=['open'])
+    async def reopen(self, ctx, channel: discord.TextChannel, *category_name: str):
+        self.update_response()
+        responses = self.responses['archive']['reopen']
+
         category_name = ' '.join(category_name).lower()
         category = discord.utils.find(lambda c: c.name.lower() == category_name, ctx.guild.categories)
-        if category is not None:
-            if channel.topic.startswith('Archived:') or channel.topic.startswith('Archived'):
-                topic = channel.topic.replace('Archived:', '')
-            else:
-                topic = channel.topic
-            # allow view message perms to @everyone role
-            await channel.edit(category=category, topic=topic, overwrites={ctx.guild.default_role: discord.PermissionOverwrite()})
-            await ctx.send(self.responses[stack()[0][3]]['success'].format(name=make_clever_looking(channel.name), category_name=make_clever_looking(category.name)))
+        if channel.topic and channel.topic.startswith('Archived'):
+            topic = channel.topic.replace('Archived:', '')
         else:
-            await ctx.send(self.responses[stack()[0][3]]['fail'].format(category_name=make_clever_looking(category_name)))
+            topic = channel.topic
+        await channel.edit(category=category, topic=topic, overwrites={ctx.guild.default_role: discord.PermissionOverwrite()})
+        # allow view message perms to @everyone role and move it to given category
+        if category is not None:
+            await ctx.send(responses['success'].format(channel=channel.mention, category_name=category.name))
+        else:
+            await ctx.send(responses['fail'].format(channel=channel.mention))
 
-    @commands.command()
+    @reopen.error
+    async def reopen_error(self, ctx, error):
+        error = getattr(error, 'original', error)
+        if isinstance(error, commands.CheckFailure):
+            return
+        responses = self.responses['archive']['reopen']['error']
+        embed = discord.Embed(color=15138816)
+        embed.title = "An error has occurred"
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed.description = responses['missing_channel']
+        elif isinstance(error, discord.Forbidden):
+            embed.description = responses['forbidden']
+
+        await ctx.send(embed=embed)
+
+    @Checks.permissions_check()
+    @commands.command(aliases=['hide'])
     async def archive(self, ctx, channel: discord.TextChannel, *category_name):
+        self.update_response()
+        responses = self.responses['archive']['archive']
+
         category_name = ' '.join(category_name).lower()
         category = discord.utils.find(lambda c: c.name.lower() == category_name, ctx.guild.categories)
-        if category is not None:
-            if channel.topic:
-                if channel.topic.startswith('Archived'):
-                    topic = channel.topic
-                else:
-                    topic = f'Archived: {channel.topic}'
+
+        if channel.topic:
+            if channel.topic.startswith('Archived'):
+                topic = channel.topic
             else:
-                topic = 'Archived'
-            # delete any pre-existing channel overwrite perms
-            changed_roles = channel.changed_roles
-            for changed_role in changed_roles:
-                await channel.set_permissions(changed_role, overwrite=None)
-            # deny view message perms to @everyone role
-            perm_overwrites = {
-                ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False)
-            }
-            await channel.edit(category=category, topic=topic, overwrites=perm_overwrites)
-            await ctx.send(self.responses[stack()[0][3]]['success'].format(name=make_clever_looking(channel.name), category_name=make_clever_looking(category.name)))
+                topic = f'Archived: {channel.topic}'
         else:
-            await ctx.send(self.responses[stack()[0][3]]['fail'].format(category_name=make_clever_looking(category_name)))
+            topic = 'Archived'
+        # delete any pre-existing channel overwrite perms
+        changed_roles = channel.changed_roles
+        for changed_role in changed_roles:
+            await channel.set_permissions(changed_role, overwrite=None)
+        # deny view message perms to @everyone role
+        perm_overwrites = {
+            ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False)
+        }
+        await channel.edit(category=category, topic=topic, overwrites=perm_overwrites)
+        if category is not None:
+            await ctx.send(responses['success'].format(channel=channel.mention, category_name=category.name))
+        else:
+            await ctx.send(responses['fail'].format(channel=channel.mention))
+
+    @archive.error
+    async def archive_error(self, ctx, error):
+        error = getattr(error, 'original', error)
+        if isinstance(error, commands.CheckFailure):
+            return
+        responses = self.responses['archive']['archive']['error']
+        embed = discord.Embed(color=15138816)
+        embed.title = "An error has occurred"
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed.description = responses['missing_channel']
+        elif isinstance(error, discord.Forbidden):
+            embed.description = responses['forbidden']
+
+        await ctx.send(embed=embed)

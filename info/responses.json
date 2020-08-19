@@ -1,0 +1,195 @@
+{
+    "fail_check": {
+        "perms": {
+            "content": null,
+            "embed_data": {
+                "title": "Permission to use {command} denied.",
+                "description": "\nThe current permission setting type is `{permission_type}`. You may not meet these requirements. To gain permission, ask someone that has permissions."
+            }
+        },
+        "custom_perms_enabled": {
+            "content": null,
+            "embed_data": {
+                "title": "Command {command} is disabled.",
+                "description": "\nCommand {command} is disabled because the permission type is currently set to {permission_type} and not `custom`. To set it to permission type to custom, please run `{prefix}set_permission_type custom`."
+            }
+
+        },
+        "jail_exists": {
+            "content": null,
+            "embed_data": {
+                "title": "Command {command} is disabled.",
+                "description": "\nCommand {command} is disabled because no current jail role and channel is set. To create a jail, run `{prefix}create_jail [jail_role], [jail_channel]`."
+            }
+        }
+    },
+    "help": {
+        "help": {
+            "content": null,
+            "embed_data": {
+                "title": "{name}'s Help Page and Modules List",
+                "description": "\nA list of bot modules. To find out more about a command or module, run `{prefix}help` on that command or module."
+            }
+        },
+        "modules": {
+            "content": null,
+            "embed_data": {
+                "title": "Module {module}: Commands List",
+                "description": "\nA list of commands for {module} module. To find out more about a command, run `{prefix}help` on that command.",
+                "fields": []
+            }
+        },
+        "commands": {
+            "content": null,
+            "embed_data": {
+                "title": "Command {command}: Info",
+                "description": "",
+                "fields": []
+            }
+        }
+    },
+    "profile": {
+        "list_profiles": {
+            "content": null,
+            "embed_data": {
+                "title": "{name}'s Profiles",
+                "description": "{name} has {number} profiles. For more information about a profile, do `{prefix}profile_info` on the profile name."
+            }
+        },
+        "profile_info": {
+            "not_found": "Profile `{profile}` was not found in the list of profiles in this server.",
+            "content": null,
+            "embed_data": {
+                "title": "Profile {profile}",
+                "description": "There are {number} total roles in this profile."
+            },
+            "error": {
+                "missing_name": "Missing required parameter `name`. Please specify a name of a profile."
+            }
+        },
+        "create_profile": {
+            "invalid_source": "{source} is not a role or member, skipping.",
+            "success": "Added role(s) {roles} to the profile {name}.",
+            "fail": "No valid role sources were provided, so no profile was created.",
+            "replace": "Profile {name} already exists, and will be replaced.",
+            "error": {
+                "missing_name": "Missing required parameter `name`. Please give a name to create a profile."
+            }
+        },
+        "delete_profile": {
+            "success": "Deleted {name} from list of profiles.",
+            "fail": "Profile {name} was not found in list of profiles.",
+            "error": {
+                "missing_name": "Missing required parameter `name`. Please give the name of the profile to be deleted."
+            }
+        },
+        "assign_profile": {
+            "starting": "Profiling user(s) {user} with profile {profile}.",
+            "already_has": "User {user} already has profile {profile}, and so no roles were given.",
+            "remove": "Role with ID {not_found_role_id} was not found as an existing role in this server, and was removed from the profile.",
+            "assigned_total": "Assigned a total of {amount} roles to member {mention}.",
+            "fail": "Profile {profile} could not be found in list of profiles for this server.",
+            "success": "Successfully assigned profile {profile} to user {mention}.",
+            "no_users": "Please include the user(s) you want to profile.",
+            "error": {
+                "missing_name": "Missing required parameter `name`. Please give the name of the profile to be assigned.",
+                "forbidden": "I do not have the permissions to execute the actions of this command. Please check that my role is higher than the roles that you want me to give or remove, and that I have the `manage_roles` permission."
+            }
+        },
+        "remove_roles": {
+            "starting": "Removing all roles from user(s) {user}.",
+            "fail": "User {user} already has no roles.",
+            "success": "Removed all roles from user {user}.",
+            "no_users": "Please include the user(s) you want to remove bot permission access for.",
+            "error": {
+                "forbidden": "I do not have the permissions to execute the actions of this command. Please check that my role is higher than the roles that you want me to give or remove, and that I have the `manage_roles` permission."
+            }
+        }
+    },
+    "jail": {
+        "create_jail": {
+            "starting": "Creating a jail role and jail channel for the server...",
+            "success": "{jail_role} has been restricted to only see {jail_channel}.",
+            "error": {
+                "missing_role": "Missing required parameter `role`. Please give the role to be converted into a jail role.",
+                "missing_channel": "Missing required parameter `channel`. Please give the channel to be converted into a jail channel.",
+                "forbidden": "I do not have the permissions to execute the actions of this command. Please check that I have the Manage Channels permission."
+            }
+        },
+        "jail": {
+            "success": "Jailed {names}.",
+            "no_users": "Please include the user(s) you want to jail.",
+            "fail": "Profile {profile} could not be found in list of profiles for this server.",
+            "error": {
+                "forbidden": "I do not have the permissions to execute the actions of this command. Please check that I have the Manage Roles permission."
+            }
+        },
+        "delete_jail": {
+            "starting": "Deleting channel overwrites for jail role `{jail_role}`...",
+            "success": "{jail_role} has had all their channel overwrites removed. The server jail has been deleted.",
+            "error": {
+                "forbidden": "I do not have the permissions to execute the actions of this command. Please check that I have the Manage Channels permission."
+            }
+        }
+    },
+    "settings": {
+        "set_prefix": {
+            "fail": "{new_prefix} is already the bot prefix.",
+            "success": "Changed prefix from {prefix} to {new_prefix}.",
+            "error": {
+                "missing_prefix": "Missing required parameter `prefix`. Please specify a new server prefix."
+            }
+        },
+        "server_config": {
+            "content": null,
+            "embed_data": {
+                "title": "{server}'s server configuration",
+                "description": "\nGeneral information about the bot configuration for this server."
+            }
+        }
+    },
+    "archive": {
+        "archive": {
+            "fail": "The given category name was either not given or invalid (perhaps spelling?), so the {channel} was archived but not placed in a category.",
+            "success": "Archived channel {channel} in `{category_name}`.",
+            "error": {
+                "missing_channel": "Missing required parameter `channel`. Please give the channel to be archived.",
+                "forbidden": "I do not have the permissions to execute the actions of this command. Please check that my role is higher than the roles that you want me to give or remove, and that I have the Manage Roles permission."
+            }
+        },
+        "reopen": {
+            "fail": "The given category name was either not given or invalid (perhaps spelling?), so the {channel} was reopened but not placed in a category.",
+            "success": "Re-opened channel {channel} in `{category_name}`.",
+            "error": {
+                "missing_channel": "Missing required parameter `channel`. Please give the channel to be reopened.",
+                "forbidden": "I do not have the permissions to execute the actions of this command. Please check that my role is higher than the roles that you want me to give or remove, and that I have the Manage Roles permission."
+            }
+        }
+    },
+    "permissions": {
+        "permission_type": {
+            "content": null,
+            "embed_data": {
+                "title": "{server}'s permission type",
+                "description": "\nCertain bot commands can only be used if the user has bot permissions. The permission type dictates what kind of users can have bot permissions. Values can be `administrator`, where the user has to be admin, `manage_server`, where the user has to have the Manage Server permission, `everyone`, where anyone can use it, and `custom`, where the owner can specify certain members to have bot permissions using the allow_permission command. Changing to and from `custom` will reset who has custom bot permissions, so use carefully."
+            }
+        },
+        "set_permission_type": {
+            "fail": "{new_permission_type} is already the current permission type.",
+            "success": "Changed permission type from {permission_type} to {new_permission_type}.",
+            "error": {
+                "missing_prefix": "Missing required parameter `name`. Please give a new permission type value. This can be `administrator`, `manage_server`, `everyone`, or `custom`."
+            }
+        },
+        "allow_permission": {
+            "fail": "User {user} already has bot access permissions.",
+            "success": "Allowed bot access permissions for user(s) {users}.",
+            "no_users": "Please include the user(s) you want to allow bot permission access for."
+        },
+        "remove_permission": {
+            "fail": "User {user} already does not have bot access permissions.",
+            "success": "Denied bot access permissions for user(s) {users}.",
+            "no_users": "Please include the user(s) you want to remove bot permission access for."
+        }
+    }
+}

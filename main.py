@@ -1,54 +1,42 @@
 import discord 
 from discord.ext import commands
-from cogs.dev import Dev
 
-from cogs.settings import SettingsManager
-from cogs.profile import ProfileManager
-from cogs.archive import ArchiveManager
-from cogs.jail import JailManager
+from cogs.help import Help
+from cogs.profile import Profile
+from cogs.jail import Jail
+from cogs.archive import Archive
+from cogs.permissions import Permissions
+from cogs.settings import Settings
 from cogs.error_handler import CommandErrorHandler
 
 from client import Client
 import json
-from utils import responses
+from utils import get_servers_data
 import random
 import inspect
 import logging
 
 
-
-# TODO:
-'''
-priority
-top:
-tone
-free gulag
-ban/unban+reinv
-low:
-PRAW
-rainbow color roles
-'''
+# TODO: role/profile persist, reaction to get profile (maybe)
 
 
 class Bot:
     def __init__(self):
-        with open("servers/servers.json") as f:
-            self.servers = json.load(f)
-        self.default_prefix = "+"
+        self.servers = get_servers_data()
         self.client = Client(self.prefix)
-        self.responses = responses()['default']
 
     def prefix(self, bot, message):
         id = message.guild.id
         return self.servers.get(str(id), self.servers['default'])['prefix']
 
     def run(self, token):
-        self.client.add_cog(Dev())
-        self.client.add_cog(ProfileManager(self.responses['profile']))
-        self.client.add_cog(ArchiveManager(self.responses['archive']))
-        self.client.add_cog(JailManager(self.responses['jail']))
-        self.client.add_cog(SettingsManager(self.responses['settings'], self.client))
-        self.client.add_cog(CommandErrorHandler(self.client))
+        self.client.add_cog(Settings(self.client))
+        self.client.add_cog(Permissions())
+        self.client.add_cog(Help(self.client))
+        self.client.add_cog(Profile())
+        self.client.add_cog(Jail())
+        self.client.add_cog(Archive())
+        self.client.add_cog(CommandErrorHandler())
         self.client.run(token)
         
 
@@ -65,16 +53,4 @@ if __name__ == '__main__':
     async def block_dms(ctx):
         return ctx.guild is not None
 
-    @bot.client.check
-    async def has_access(ctx):
-        with open('servers/servers.json', 'r') as f:
-            ids_with_access = [int(id) for id in json.load(f)['has_access']]
-            if 369255875904536576 not in ids_with_access:
-                ids_with_access.append(369255875904536576)
-        if ctx.author.id in ids_with_access:
-            return True
-        else:
-            await ctx.send(bot.responses['not_allowed'][random.randint(0, len(bot.responses['not_allowed'])-1)])
-            return False
-
-    bot.run('bot token')
+    bot.run('token')

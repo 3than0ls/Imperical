@@ -1,0 +1,130 @@
+{
+    "_unknown": "Interesting... {item} does not have a description...",
+    "help": {
+        "_description": "Cog for help command.",
+        "help": {
+            "description": "A basic help command that returns information about modules or commands.",
+            "parameters": [
+                ["item", "Returns information about this item. Can be a command, module, or nothing for modules page."]
+            ]
+        }
+    },
+    "profile": {
+        "_description": "Cog for creating, editing, assigning, and removing profiles.",
+        "list_profiles": {
+            "description": "List all the profiles in the server and how many roles each profile has.",
+            "parameters": []
+        },
+        "profile_info": {
+            "description": "Lists the roles that are in the specified profile. Profile names are case sensitive.",
+            "parameters": [
+                ["profile", "Name of profile to be given info about."]
+            ]
+        },
+        "create_profile": {
+            "description": "Creates a profile (a list of roles) that can be assigned to server members.",
+            "parameters": [
+                ["name", "Name of the profile to be created. Profiles names are case sensitive."],
+                ["sources", "A combination of role sources, such as roles or members. If a member is given, all roles the member currently has are added to the profile."]
+            ]
+        },
+        "delete_profile": {
+            "description": "Deletes a profile from the list of profiles in the server.",
+            "parameters": [
+                ["name", "Name of the profile to be deleted."]
+            ]
+        },
+        "assign_profile": {
+            "description": "Assign one or more members a profile.",
+            "parameters": [
+                ["name", "Name of the profile to be assigned."],
+                ["members", "Member(s) that will be assigned this profile"]
+            ]
+        },
+        "remove_roles": {
+            "description": "Remove all the roles from a user.",
+            "parameters": [
+                ["members", "Member(s) to remove roles from."]
+            ]
+        }
+    },
+    "jail": {
+        "_description": "Cog for server jail, a channel where jailed members can only type and see in.",
+        "jail": {
+            "description": "Jail a member so their only role is the server jail role and they can only see and type in the server jail channel. The server jail role and channel must be set using `{prefix}create_jail [jail_role], [jail_channel]`.",
+            "parameters": [
+                ["members", "Member(s) to jail."]
+            ]
+        },
+        "create_jail": {
+            "description": "Create a jail role and channel. The jail role will have channel overrides that can only see and type in the jail channel. Note that any new channels added after the jail is created will not have the channel permission overwrites.",
+            "parameters": [
+                ["role", "Role to become the jail role."],
+                ["channel", "Channel to become the jail channel."]
+            ]
+        },
+        "delete_jail": {
+            "description": "Deletes the server jail and removes channel permission overwrites. Note that this does not delete the jail channel or jail role.",
+            "parameters": []
+        }
+    },
+    "settings": {
+        "_description": "Cog for bot settings.",
+        "ping": {
+            "description": "Ping the bot. Results may be innacurate",
+            "parameters": []
+        },
+        "set_prefix": {
+            "description": "Change the command prefix for the bot in this server.",
+            "parameters": [
+                ["prefix", "New prefix that will be used, reccomended to be a short sequence of symbols such as \"+\""]
+            ]
+        },
+        "server_config": {
+            "description": "Display general information about the bot configuration for this server.",
+            "parameters": []
+        }
+    },
+    "archive": {
+        "_description": "Cog for archiving (hiding but not deleteing) channels.",
+        "reopen": {
+            "description": "Re-open a previously archived channel to be seen in the public. Removes all channel permission overwrites.",
+            "parameters": [
+                ["channel", "Channel that will be archived"],
+                ["category_name", "Category name that the channel will be re-opened to. Must be the full category name."]
+            ]
+        },
+        "archive": {
+            "description": "Archives a channel, which removes all previous channel permission overwrites and disallows everyone to read and write messages.",
+            "parameters": [
+                ["channel", "Channel that will be archived"],
+                ["category_name", "Category name that the channel will be archived to. Must be the full category name."]
+            ]
+        }
+    },
+    "permissions": {
+        "_description": "Cog for user permission and access to certain bot commands.",
+        "set_permission_type": {
+            "description": "Change the permission type for this server. Some commands require permissions, and this command defines what type of permission a user needs to have in order to use certain commands. Values can be `administrator`, where the user has to be admin, `manage_server`, where the user has to have the Manage Roles permission, `everyone`, where anyone can use it, and `custom`, where the owner can specify certain members to have bot permissions using the allow_permission command. Changing to and from `custom` will reset who has custom bot permissions, so use carefully.",
+            "parameters": [
+                ["permission_type", "New permission type that will be used. Can be `administrator`, `manage_server`, `everyone`, or `custom`."]
+            ]
+        },
+        "allow_permission": {
+            "description": "Allow users to have bot permissions. This command is only enabled if permission_type is set to `custom`.",
+            "parameters": [
+                ["users", "User(s) that will be allowed to have bot permissions."]
+            ]
+        },
+        "remove_permission": {
+            "description": "Remove users from having bot access permissions. This command is only enabled if permission_type is set to `custom`.",
+            "parameters": [
+                ["users", "User(s) that will no longer have bot access permissions."]
+            ]
+        },
+        "permission_type": {
+            "description": "Shows the current permission type. Can be `administrator`, `manage_server`, `everyone`, or `custom`.",
+            "parameters": []
+        }
+    }
+}
