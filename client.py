@@ -13,12 +13,8 @@ class Client(commands.Bot):
         await self.change_presence(activity=discord.Game(name="ping me for help!"))
 
     async def on_guild_join(self, guild):
-        guild_id = str(ctx.guild.id)
+        guild_id = str(guild.id)
         guild_exists(guild_id)
-
-    async def on_guild_remove(self, guild):
-        guild_id = str(ctx.guild.id)
-        pass # no need to implement
 
     async def on_message(self, message):
         """ensures bot does not respond to itself"""

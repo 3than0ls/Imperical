@@ -215,9 +215,10 @@ class Profile(commands.Cog):
                         # else:
                         #     await ctx.send(self.responses[stack()[0][3]]['skip'].format(name=member.name, role=make_clever_looking(role), profile=make_clever_looking(profile)))
                     else:
+                        print('aaa')
                         not_found_role_id = role_ids[i]
                         self.remove_profile_role(guild_id, int(not_found_role_id), profile)
-                        message += f"{responses['remove'].format(not_found_role_id=format(role_id, 'single_code'))}\n"
+                        message += f"{responses['remove'].format(not_found_role_id=format(role.id, 'single_code'))}\n"
                 if not roles_to_be_added:
                     message += f"{responses['already_has'].format(user=member.name, profile=format(profile, 'single_code'))}\n"
                 else:
@@ -230,7 +231,7 @@ class Profile(commands.Cog):
             message += responses["fail"].format(profile=format(profile, "single_code"))
         await ctx.send(message)
 
-    @assign_profile.error
+    # @assign_profile.error
     async def assign_profile_error(self, ctx, error):
         error = getattr(error, 'original', error)
         if isinstance(error, commands.CheckFailure):

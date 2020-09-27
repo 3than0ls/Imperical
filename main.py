@@ -53,4 +53,4 @@ if __name__ == '__main__':
     async def block_dms(ctx):
         return ctx.guild is not None
 
-    bot.run('token')
+    bot.run('NzE3OTU1MTYwMDE3NDY5NTIx.Xt_N4g.yclT9JANhFdvHoSx9Gm4KhdjMWo')

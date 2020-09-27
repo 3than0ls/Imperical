@@ -1,5 +1,1 @@
-
-Image Name                     PID Session Name        Session#    Mem Usage
-========================= ======== ================ =========== ============
-pythonw.exe                   1884 Console                    1     24,568 K
-pythonw.exe                  31384 Console                    1     35,776 K
+INFO: No tasks are running which match the specified criteria.
