@@ -1,12 +1,9 @@
 from discord.ext import commands
 import discord
 import json
-from utils import format, get_servers_data, set_servers_data, update_setting, guild_exists
-from inspect import stack
+from utils import format, get_servers_data, update_setting, guild_exists
 from checks import Checks
-import os
 import random
-import copy
 
 class Settings(commands.Cog):
     def __init__(self, client):

@@ -2,7 +2,6 @@ from discord.ext import commands
 import discord
 import json
 from checks import Checks
-from utils import get_servers_data, set_servers_data
 
 class Archive(commands.Cog):    
     def __init__(self):

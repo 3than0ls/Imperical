@@ -1,6 +1,6 @@
 from discord.ext import commands
 import discord
-from utils import get_servers_data, set_servers_data, guild_exists
+from utils import get_servers_data, guild_exists
 import time
 
 class Client(commands.Bot):

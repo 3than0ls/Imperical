@@ -1,7 +1,7 @@
 from discord.ext import commands
 import discord
 import json
-from utils import format, get_servers_data, set_servers_data, guild_exists
+from utils import get_servers_data, set_servers_data
 from checks import Checks
 
 class Jail(commands.Cog):   

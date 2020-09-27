@@ -2,11 +2,8 @@ from discord.ext import commands
 import discord
 import json
 from utils import format, get_servers_data, set_servers_data, guild_exists, update_setting
-from inspect import stack
 from checks import Checks
-import os
 import random
-import copy
 
 class Permissions(commands.Cog):
     def __init__(self):

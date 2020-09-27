@@ -1,4 +1,3 @@
-import discord 
 from discord.ext import commands
 
 from cogs.help import Help
@@ -10,10 +9,7 @@ from cogs.settings import Settings
 from cogs.error_handler import CommandErrorHandler
 
 from client import Client
-import json
 from utils import get_servers_data
-import random
-import inspect
 import logging
 
 

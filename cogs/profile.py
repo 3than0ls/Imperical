@@ -3,8 +3,7 @@ import discord
 import json
 import random
 import typing
-from utils import format, remove_char, get_servers_data, set_servers_data, guild_exists
-from cogs.settings import Settings
+from utils import format, get_servers_data, set_servers_data, guild_exists
 from checks import Checks
 
 # TODO: profile_server command, creating profiles for every member with an optional argumemt of min amount of roles in order to create a profile

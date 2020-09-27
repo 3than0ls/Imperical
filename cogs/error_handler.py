@@ -1,9 +1,4 @@
-import traceback
-import sys
 from discord.ext import commands
-import discord
-from utils import format
-import json
 
 class CommandErrorHandler(commands.Cog, command_attrs=dict(hidden=True)):       
     @commands.Cog.listener()

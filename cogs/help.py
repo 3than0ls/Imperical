@@ -1,6 +1,5 @@
 from discord.ext import commands
 import discord
-import datetime
 import json
 from utils import format, get_servers_data, guild_exists
 
