@@ -10,7 +10,7 @@ from cogs.error_handler import CommandErrorHandler
 
 from client import Client
 from utils import get_servers_data
-import logging
+# import logging
 
 
 # TODO: role/profile persist, reaction to get profile (maybe)
@@ -38,12 +38,12 @@ class Bot:
 
 if __name__ == '__main__':
     bot = Bot()
-
+    '''
     logger = logging.getLogger('discord')
     logger.setLevel(logging.WARNING)
     handler = logging.FileHandler(filename='logs/discord.log', encoding='utf-8', mode='w')
     handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-    logger.addHandler(handler)
+    logger.addHandler(handler)'''
 
     @bot.client.check
     async def block_dms(ctx):
