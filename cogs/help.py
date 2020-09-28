@@ -1,9 +1,6 @@
 from discord.ext import commands
-import discord
 import json
-from utils import format, get_servers_data, guild_exists
-
-import random
+from utils import embed_template, format, get_servers_data, guild_exists
 
 class Help(commands.Cog):
     def __init__(self, client):
@@ -93,8 +90,7 @@ class Help(commands.Cog):
         if specific is not None:
             specific = specific.lower()
         
-        embed = discord.Embed()
-        embed.color = random.randint(0, 16777215)
+        embed = embed_template()
         content = None
 
         # dictionary of lower cog name: cog

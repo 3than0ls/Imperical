@@ -12,6 +12,11 @@ class Jail(commands.Cog):
         with open("info/responses.json", "r") as f:
             self.responses = json.load(f)
     
+    @commands.Cog.listener()
+    async def on_channel_create(self, channel):
+        guild_data = get_servers_data()[str(channel.guild.id)]
+        jail_role = discord.utils.get(channel.guild.roles, id=guild_data["jail_role"])
+        channel.set_permissions(jail_role, read_messages=True, send_messages=True)
 
     @Checks.permissions_check()
     @commands.command(aliases=['create_gulag', 'create_prison', 'make_jail'])
@@ -36,24 +41,6 @@ class Jail(commands.Cog):
             
         await ctx.send(responses['success'].format(jail_role=jail_role.mention, jail_channel=jail_channel.mention))
 
-    @create_jail.error
-    async def create_jail_error(self, ctx, error):
-        error = getattr(error, 'original', error)
-        if isinstance(error, commands.CheckFailure):
-            return
-        responses = self.responses['jail']['create_jail']['error']
-        embed = discord.Embed(color=15138816)
-        embed.title = "An error has occurred"
-        if isinstance(error, commands.MissingRequiredArgument):
-            if error.param.name == 'jail_role':
-                embed.description = responses['missing_role']
-            elif error.param.name == 'jail_channel':
-                embed.description = responses['missing_channel']
-        elif isinstance(error, discord.Forbidden):
-            embed.description = responses['forbidden']
-            
-        await ctx.send(embed=embed)
-
 
     @Checks.jail_exists_check()
     @Checks.permissions_check()
@@ -63,13 +50,24 @@ class Jail(commands.Cog):
         responses = self.responses['jail']['jail']
 
         if not members:
-            return await ctx.send(responses["no_users"])
+            raise commands.BadArgument("invalid_users")
+
+        await ctx.send(responses['starting'])
 
         guild_id = str(ctx.guild.id)
         guild_data = get_servers_data()[guild_id]
 
         jail_role = discord.utils.get(ctx.guild.roles, id=guild_data["jail_role"])
-        jail_channel = discord.utils.get(ctx.guild.text_channels, id=guild_data["jail_channel"])
+
+        # add channel overwrites if it doesnt have them
+        for channel in ctx.guild.text_channels:
+            if channel.id == guild_data["jail_channel"]:
+                continue
+            overwrites = channel.overwrites_for(jail_role)
+            if overwrites.is_empty():
+                overwrites.update(read_messages=False)
+            await channel.set_permissions(jail_role, overwrite=overwrites)
+
 
         for member in members:
             member_roles = [role for role in member.roles if role.name != '@everyone']
@@ -78,17 +76,6 @@ class Jail(commands.Cog):
             await member.remove_roles(*member_roles)
         names = [f"{member.mention}" for member in members]
         await ctx.send(responses["success"].format(names=', '.join(names)))
-
-    @jail.error
-    async def jail_error(self, ctx, error):
-        responses = self.responses['jail']['jail']['error']
-        error = getattr(error, 'original', error)
-        embed = discord.Embed(color=15138816)
-        embed.title = "An error has occurred"
-        if isinstance(error, discord.Forbidden):
-            embed.description = responses['forbidden']
-            
-        await ctx.send(embed=embed)
 
 
     @Checks.jail_exists_check()
@@ -108,16 +95,3 @@ class Jail(commands.Cog):
         data[guild_id]["jail_channel"] = None
         set_servers_data(data)
         await ctx.send(responses["success"].format(jail_role=jail_role.mention))
-
-    @delete_jail.error
-    async def delete_jail_error(self, ctx, error):
-        error = getattr(error, 'original', error)
-        if isinstance(error, commands.CheckFailure):
-            return
-        responses = self.responses['jail']['delete_jail']['error']
-        embed = discord.Embed(color=15138816)
-        embed.title = "An error has occurred"
-        if isinstance(error, discord.Forbidden):
-            embed.description = responses['forbidden']
-            
-        await ctx.send(embed=embed)

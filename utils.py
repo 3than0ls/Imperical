@@ -1,5 +1,7 @@
 import json
 from copy import deepcopy
+import discord
+import random
 
 formats = {
     "italic": "*{text}*",
@@ -16,20 +18,6 @@ def format(text, *styles):
         message = formats[style].format(text=message)
     return message
 
-remove_chars = {
-    "brackets": "[]{}",
-    "parantheses": "()",
-    "quotes": '""',
-    "apostrophes": "''",
-}
-
-def remove_char(text, *remove_types):
-    for remove_type in remove_types:
-        for char in remove_chars[remove_type]:
-            text = text.replace(char, "")
-    return text
-
-
 PROFILES_PATH = 'servers/servers.json'
 def get_servers_data():
     with open(PROFILES_PATH, 'r') as f:
@@ -39,6 +27,15 @@ def get_servers_data():
 def set_servers_data(data):
     with open(PROFILES_PATH, 'w') as f:
         json.dump(data, f, indent=4)
+
+
+def get_config():
+    with open('config.json', 'r') as f:
+        return json.load(f)
+
+def get_responses():
+    with open('info/responses.json', 'r') as f:
+        return json.load(f)
 
 def guild_exists(guild_id: str):
     """checks if a guild exists, and if not, create it"""
@@ -54,13 +51,12 @@ def update_setting(guild_id: str, setting, new_value):
     data[guild_id][setting] = new_value
     set_servers_data(data)
 
+    
+def embed_template(title=None, description=None):
+    embed = discord.Embed(color=random.randint(0, 16777215))
+    if title is not None:
+        embed.title = title
+    if description is not None:
+        embed.description = description
 
-
-def filter_dunders(filter_list):
-    return list(filter(lambda x: not x.startswith('__'), filter_list))
-
-def responses():
-    with open('responses.json', 'r') as f:
-        return json.load(f)
-
-# responses are put in list so they can be randomly accessed later when I feel like doing it >:(
+    return embed

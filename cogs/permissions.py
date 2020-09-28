@@ -1,7 +1,7 @@
 from discord.ext import commands
 import discord
 import json
-from utils import format, get_servers_data, set_servers_data, guild_exists, update_setting
+from utils import embed_template, format, get_servers_data, set_servers_data, guild_exists, update_setting
 from checks import Checks
 import random
 
@@ -40,21 +40,9 @@ class Permissions(commands.Cog):
             if permission_type == 'custom':
                 update_setting(guild_id, 'custom_has_permission', [])
             update_setting(guild_id, 'permission_type', new_permission_type)
-            message = responses['success'].format(permission_type=format(permission_type, "single_code"), new_permission_type=format(new_permission_type, "single_code"))
+            ctx.send(responses['success'].format(permission_type=format(permission_type, "single_code"), new_permission_type=format(new_permission_type, "single_code")))
         else:
-            message = responses['fail'].format(new_permission_type=format(new_permission_type, "single_code"))
-
-        await ctx.send(message)
-
-    @set_permission_type.error
-    async def set_permission_type_error(self, ctx, error):
-        responses = self.responses['permissions']['set_permission_type']['error']
-        embed = discord.Embed(color=15138816)
-        embed.title = "An error has occurred"
-        if isinstance(error, commands.MissingRequiredArgument):
-            embed.description = responses['missing_permission_type']
-
-        await ctx.send(embed=embed)
+            raise commands.BadArgument(permission_type, "invalid_permission_type")
 
     
     @commands.command(aliases=['permissiontype', 'perm_type', 'type', 'server_permission', 'perms'])
@@ -67,12 +55,11 @@ class Permissions(commands.Cog):
         guild_exists(guild_id)
         permission_type = data[guild_id]["permission_type"]
 
-        embed = discord.Embed()
-        embed.color = random.randint(0, 16777215)
-        content = None
+        embed = embed_template(
+            title = responses["embed_data"]["title"].format(server=ctx.guild.name),
+            description = responses["embed_data"]["description"]
+        )
         
-        embed.title = responses["embed_data"]["title"].format(server=ctx.guild.name)
-        embed.description = responses["embed_data"]["description"]
 
         embed.add_field(name=f"Permission type:", value=permission_type)
 
@@ -85,7 +72,7 @@ class Permissions(commands.Cog):
             users.append(f"{ctx.guild.owner.name}#{ctx.guild.owner.discriminator} (server owner)")
             embed.add_field(name="Custom permission access", value=', '.join(users))
 
-        await ctx.send(content=content, embed=embed)
+        await ctx.send(content=None, embed=embed)
 
 
 

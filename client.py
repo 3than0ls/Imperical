@@ -1,6 +1,6 @@
 from discord.ext import commands
 import discord
-from utils import get_servers_data, guild_exists
+from utils import get_config, guild_exists
 import time
 
 class Client(commands.Bot):
@@ -24,13 +24,13 @@ class Client(commands.Bot):
         if message.content == f"<@!{self.user.id}>" or message.content == f"<@{self.user.id}":
             return await ctx.invoke(self.get_command('help'))
 
-        elif message.content == f"begone <@!{self.user.id}>" and message.author.id in get_servers_data()['backdoor_access']:
+        elif message.content == f"shutdown <@!{self.user.id}>" and message.author.id in get_config()['has_access']:
             await ctx.send("Shutting down.")
             print("Manual shut down intiated.")
             quit()
 
         # elif message.author.id == ctx.guild.owner.id and message.content == "happy bday to me":
-        #     return await ctx.send("happy brday etan") 
+        #     return await ctx.send("happy brday") 
         # :D dated 8/9/2020, for 8/10/2020. cheers to me!
 
         # if ping bot, run help command

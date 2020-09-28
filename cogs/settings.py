@@ -1,7 +1,7 @@
 from discord.ext import commands
 import discord
 import json
-from utils import format, get_servers_data, update_setting, guild_exists
+from utils import embed_template, format, get_servers_data, update_setting, guild_exists
 from checks import Checks
 import random
 
@@ -29,19 +29,10 @@ class Settings(commands.Cog):
         guild_exists(str(ctx.guild.id))
         if ctx.prefix != new_prefix:
             update_setting(str(ctx.guild.id), 'prefix', new_prefix)
-            message = responses['success'].format(prefix=format(ctx.prefix, "single_code"), new_prefix=format(new_prefix, "single_code"))
             self.client.command_prefix = new_prefix
+            await ctx.send(responses['success'].format(prefix=format(ctx.prefix, "single_code"), new_prefix=format(new_prefix, "single_code")))
         else:
-            message = responses['fail'].format(new_prefix=format(new_prefix, "single_code"))
-
-        await ctx.send(message)
-
-    @set_prefix.error
-    async def set_prefix_error(self, ctx, error):
-        responses = self.responses['settings']['set_prefix']['error']
-        error = getattr(error, 'original', error)
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send(responses['missing_prefix'])
+            raise commands.BadArgument(new_prefix, "invalid_new_prefix")
 
     
     @commands.command(aliases=['server', 'config', 'serverconfig', 'settings'])
@@ -61,12 +52,11 @@ class Settings(commands.Cog):
         jail_channel = discord.utils.get(ctx.guild.text_channels, id=guild_data["jail_channel"])
         jail_channel = jail_channel.mention if jail_channel is not None else jail_channel
 
-        embed = discord.Embed()
-        embed.color = random.randint(0, 16777215)
-        content = None
+        embed = embed_template(
+            title = responses["embed_data"]["title"].format(server=ctx.guild.name),
+            description = responses["embed_data"]["description"]
+        )
         
-        embed.title = responses["embed_data"]["title"].format(server=ctx.guild.name)
-        embed.description = responses["embed_data"]["description"]
 
         embed.add_field(name="Bot prefix", value=prefix, inline=True)
         embed.add_field(name="Number of profiles", value=number_of_profiles, inline=True)

@@ -9,11 +9,9 @@ from cogs.settings import Settings
 from cogs.error_handler import CommandErrorHandler
 
 from client import Client
-from utils import get_servers_data
-# import logging
+from utils import get_servers_data, get_config
+import logging
 
-
-# TODO: role/profile persist, reaction to get profile (maybe)
 
 
 class Bot:
@@ -32,21 +30,23 @@ class Bot:
         self.client.add_cog(Profile())
         self.client.add_cog(Jail())
         self.client.add_cog(Archive())
-        self.client.add_cog(CommandErrorHandler())
+        # self.client.add_cog(CommandErrorHandler(self.client))
         self.client.run(token)
         
 
 if __name__ == '__main__':
     bot = Bot()
-    '''
-    logger = logging.getLogger('discord')
-    logger.setLevel(logging.WARNING)
-    handler = logging.FileHandler(filename='logs/discord.log', encoding='utf-8', mode='w')
-    handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-    logger.addHandler(handler)'''
+    config = get_config()
+    
+    if config['logging']:
+        logger = logging.getLogger('discord')
+        logger.setLevel(logging.WARNING)
+        handler = logging.FileHandler(filename='logs/discord_logs.txt', encoding='utf-8', mode='w')
+        handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+        logger.addHandler(handler)
 
     @bot.client.check
     async def block_dms(ctx):
         return ctx.guild is not None
 
-    bot.run('NzE3OTU1MTYwMDE3NDY5NTIx.Xth12Q.MjkOpsXpFiP9pZ399rgvThFZwUo')
+    bot.run(config['key'])

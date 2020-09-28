@@ -17,33 +17,24 @@ class Archive(commands.Cog):
         self.update_response()
         responses = self.responses['archive']['reopen']
 
-        category_name = ' '.join(category_name).lower()
-        category = discord.utils.find(lambda c: c.name.lower() == category_name, ctx.guild.categories)
+        if category_name:
+            category_name = ' '.join(category_name).lower()
+            category = discord.utils.find(lambda c: c.name.lower() == category_name, ctx.guild.categories)
+            if category is None:
+                raise commands.BadArgument(category_name, "invalid_category_name")
+        else:
+            category = None
+
+
         if channel.topic and channel.topic.startswith('Archived'):
             topic = channel.topic.replace('Archived:', '')
         else:
             topic = channel.topic
+
         await channel.edit(category=category, topic=topic, overwrites={ctx.guild.default_role: discord.PermissionOverwrite()})
         # allow view message perms to @everyone role and move it to given category
-        if category is not None:
-            await ctx.send(responses['success'].format(channel=channel.mention, category_name=category.name))
-        else:
-            await ctx.send(responses['fail'].format(channel=channel.mention))
 
-    @reopen.error
-    async def reopen_error(self, ctx, error):
-        error = getattr(error, 'original', error)
-        if isinstance(error, commands.CheckFailure):
-            return
-        responses = self.responses['archive']['reopen']['error']
-        embed = discord.Embed(color=15138816)
-        embed.title = "An error has occurred"
-        if isinstance(error, commands.MissingRequiredArgument):
-            embed.description = responses['missing_channel']
-        elif isinstance(error, discord.Forbidden):
-            embed.description = responses['forbidden']
-
-        await ctx.send(embed=embed)
+        await ctx.send(responses['success'].format(channel=channel.mention, category_name=category.name))
 
     @Checks.permissions_check()
     @commands.command(aliases=['hide'])
@@ -51,8 +42,13 @@ class Archive(commands.Cog):
         self.update_response()
         responses = self.responses['archive']['archive']
 
-        category_name = ' '.join(category_name).lower()
-        category = discord.utils.find(lambda c: c.name.lower() == category_name, ctx.guild.categories)
+        if category_name:
+            category_name = ' '.join(category_name).lower()
+            category = discord.utils.find(lambda c: c.name.lower() == category_name, ctx.guild.categories)
+            if category is None:
+                raise commands.BadArgument(category_name, "invalid_category_name")
+        else:
+            category = None
 
         if channel.topic:
             if channel.topic.startswith('Archived'):
@@ -70,22 +66,5 @@ class Archive(commands.Cog):
             ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False)
         }
         await channel.edit(category=category, topic=topic, overwrites=perm_overwrites)
-        if category is not None:
-            await ctx.send(responses['success'].format(channel=channel.mention, category_name=category.name))
-        else:
-            await ctx.send(responses['fail'].format(channel=channel.mention))
 
-    @archive.error
-    async def archive_error(self, ctx, error):
-        error = getattr(error, 'original', error)
-        if isinstance(error, commands.CheckFailure):
-            return
-        responses = self.responses['archive']['archive']['error']
-        embed = discord.Embed(color=15138816)
-        embed.title = "An error has occurred"
-        if isinstance(error, commands.MissingRequiredArgument):
-            embed.description = responses['missing_channel']
-        elif isinstance(error, discord.Forbidden):
-            embed.description = responses['forbidden']
-
-        await ctx.send(embed=embed)
+        await ctx.send(responses['success'].format(channel=channel.mention, category_name=category.name))

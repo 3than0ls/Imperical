@@ -3,7 +3,7 @@ import discord
 import json
 import random
 import typing
-from utils import format, get_servers_data, set_servers_data, guild_exists
+from utils import embed_template, format, get_servers_data, set_servers_data, guild_exists
 from checks import Checks
 
 # TODO: profile_server command, creating profiles for every member with an optional argumemt of min amount of roles in order to create a profile
@@ -43,12 +43,11 @@ class Profile(commands.Cog):
         profiles = get_servers_data()[guild_id]['profiles']
         number_of_profiles = len(profiles)
 
-        embed = discord.Embed()
-        embed.color = random.randint(0, 16777215)
+        embed = embed_template(
+            title=responses['embed_data']['title'].format(name=ctx.guild.name),
+            description=responses['embed_data']['description'].format(name=ctx.guild.name, number=format(number_of_profiles, "bold"), prefix=ctx.prefix)
+        )
         content = responses['content']
-
-        embed.title = responses['embed_data']['title'].format(name=ctx.guild.name)
-        embed.description = responses['embed_data']['description'].format(name=ctx.guild.name, number=format(number_of_profiles, "bold"), prefix=ctx.prefix)
 
         for profile_name, role_ids in profiles.items():
             embed.add_field(name=profile_name, value=f"{format(len(role_ids), 'bold')} total roles.")
@@ -64,11 +63,11 @@ class Profile(commands.Cog):
 
         if profile in profiles:
             profile_roles = profiles[profile]
-            embed = discord.Embed()
-            embed.color = random.randint(0, 16777215)
+            embed = embed_template(
+                title = responses['embed_data']['title'].format(profile=profile),
+                description = responses['embed_data']['description'].format(number=format(len(profile_roles), "bold"))
+            )
             content = responses['content']
-            embed.title = responses['embed_data']['title'].format(profile=profile)
-            embed.description = responses['embed_data']['description'].format(number=format(len(profile_roles), "bold"))
             field = ""
             for role_id in profile_roles:
                 role = discord.utils.get(ctx.guild.roles, id=role_id)
@@ -77,22 +76,8 @@ class Profile(commands.Cog):
             embed.add_field(name="Roles:", value=field)
             await ctx.send(content=content, embed=embed)
         else:
-            await ctx.send(responses['not_found'].format(profile=profile))
-
-    @profile_info.error
-    async def profile_info_error(self, ctx, error):
-        error = getattr(error, 'original', error)
-        if isinstance(error, commands.CheckFailure):
-            return
-        responses = self.responses['profile']['profile_info']['error']
-        embed = discord.Embed(color=15138816)
-        embed.title = "An error has occurred"
-        if isinstance(error, commands.MissingRequiredArgument):
-            embed.description = responses['missing_name']
-        await ctx.send(embed=embed)
-        
-
-
+            raise commands.BadArgument(profile, "invalid_profile")
+            
 
     @Checks.permissions_check()
     @commands.command(aliases=['create', 'make_profile', 'createprofile'])
@@ -128,54 +113,28 @@ class Profile(commands.Cog):
             set_servers_data(data)
             
             message += responses['success'].format(roles=', '.join([format(role_name, "single_code") for role_name in role_names]), name=format(name, "single_code"))
+            await ctx.send(message)
         else:
-            message += responses['fail']
-        await ctx.send(message)
-
-    @create_profile.error
-    async def create_profile_error(self, ctx, error):
-        responses = self.responses['profile']['create_profile']['error']
-        error = getattr(error, 'original', error)
-        embed = discord.Embed(color=15138816)
-        embed.title = "An error has occurred"
-        if isinstance(error, commands.MissingRequiredArgument):
-            embed.description = responses['missing_name']
-
-        await ctx.send(embed=embed)
+            raise commands.BadArgument("invalid_role_sources")
 
 
     @Checks.permissions_check()
     @commands.command(aliases=['delete', 'remove_profile', 'remove', 'deleteprofile'])
-    async def delete_profile(self, ctx, name: str):
+    async def delete_profile(self, ctx, profile: str):
         self.update_responses()
         responses = self.responses['profile']['delete_profile']
 
         guild_id = str(ctx.guild.id)
-        message = ""
         if guild_exists(guild_id):
             data = get_servers_data()
-            if name in data[guild_id]['profiles']:
-                del data[guild_id]['profiles'][name]
+            if profile in data[guild_id]['profiles']:
+                del data[guild_id]['profiles'][profile]
                 set_servers_data(data)
-                message += responses["success"].format(name=format(name, "single_code"))
+                await ctx.send(responses["success"].format(name=format(profile, "single_code")))
             else:
-                message += responses["fail"].format(name=format(name, "single_code"))
+                raise commands.BadArgument(profile, "invalid_profile")
         else:
-            message += responses["fail"].format(name=format(name, "single_code"))
-
-        await ctx.send(message)
-
-    @delete_profile.error
-    async def delete_profile_error(self, ctx, error):
-        error = getattr(error, 'original', error)
-        if isinstance(error, commands.CheckFailure):
-            return
-        responses = self.responses['profile']['delete_profile']['error']
-        embed = discord.Embed(color=15138816)
-        embed.title = "An error has occurred"
-        if isinstance(error, commands.MissingRequiredArgument):
-            embed.description = responses['missing_name']
-        await ctx.send(embed=embed)
+            raise commands.BadArgument(profile, "invalid_profile")
 
     
     @Checks.permissions_check()
@@ -184,14 +143,14 @@ class Profile(commands.Cog):
         self.update_responses()
         responses = self.responses['profile']['assign_profile']
 
+        if not members:
+            raise commands.BadArgument("invalid_members")
+
         # make default member author
         guild_id = str(ctx.guild.id)
         role_ids = self.get_profile(guild_id, profile)
 
         message = ""
-
-        if not members:
-            return await ctx.send(responses['no_users'])
 
         if role_ids:
             member_names = [member.name for member in members]
@@ -211,40 +170,21 @@ class Profile(commands.Cog):
                         if role not in member.roles:
                             roles_to_be_added.append(role)
                             amount += 1
-                        # else:
-                        #     await ctx.send(self.responses[stack()[0][3]]['skip'].format(name=member.name, role=make_clever_looking(role), profile=make_clever_looking(profile)))
                     else:
-                        print('aaa')
                         not_found_role_id = role_ids[i]
                         self.remove_profile_role(guild_id, int(not_found_role_id), profile)
-                        message += f"{responses['remove'].format(not_found_role_id=format(role.id, 'single_code'))}\n"
+                        message += f"{responses['remove'].format(not_found_role_id=format(role_ids[i], 'single_code'))}\n"
                 if not roles_to_be_added:
                     message += f"{responses['already_has'].format(user=member.name, profile=format(profile, 'single_code'))}\n"
                 else:
                     await member.add_roles(*roles_to_be_added)
                     message += f"{responses['success'].format(profile=format(profile, 'single_code'), mention=member.name)}\n"
-
+                    
             if len(members) == 1 and roles_to_be_added:  # only send if a profile was assigned to one member
                 message += f"{responses['assigned_total'].format(amount=format(amount, 'bold'), mention=member.name)}\n"
+            await ctx.send(message)
         else:
-            message += responses["fail"].format(profile=format(profile, "single_code"))
-        await ctx.send(message)
-
-    # @assign_profile.error
-    async def assign_profile_error(self, ctx, error):
-        error = getattr(error, 'original', error)
-        if isinstance(error, commands.CheckFailure):
-            return
-        responses = self.responses['profile']['assign_profile']['error']
-        embed = discord.Embed(color=15138816)
-        embed.title = "An error has occurred"
-        if isinstance(error, commands.MissingRequiredArgument):
-            embed.description = responses['missing_name']
-        elif isinstance(error, discord.Forbidden):
-            embed.description = responses['forbidden']
-            
-        # check failure print an embed fail blah blah fuck me tbh
-        await ctx.send(embed=embed)
+            raise commands.BadArgument(profile, "invalid_profile")
 
 
     @Checks.permissions_check()
@@ -253,32 +193,13 @@ class Profile(commands.Cog):
         self.update_responses()
         responses = self.responses['profile']['remove_roles']
         if not members:
-            return await ctx.send(responses['no_users'])
-        message = ""
+            raise commands.BadArgument("invalid_members")
         await ctx.send(responses["starting"].format(user=', '.join([member.name for member in members])))
         for member in members:
             roles_to_be_removed = self.filter_everyone_role(member.roles)
             if roles_to_be_removed:
                 await member.remove_roles(*roles_to_be_removed)
-                message += f"{responses['success'].format(user=member.name)}\n"
-            else:
-                message += f"{responses['fail'].format(user=member.name)}\n"
-
-
-        await ctx.send(message)
-
-    @remove_roles.error
-    async def remove_roles_error(self, ctx, error):
-        error = getattr(error, 'original', error)
-        if isinstance(error, commands.CheckFailure):
-            return
-        responses = self.responses['profile']['remove_roles']['error']
-        embed = discord.Embed(color=15138816)
-        embed.title = "An error has occurred"
-        if isinstance(error, discord.Forbidden):
-            embed.description = responses['forbidden']
-            
-        await ctx.send(embed=embed)
+                await ctx.send(f"{responses['success'].format(user=member.name)}\n")
 
 
         
