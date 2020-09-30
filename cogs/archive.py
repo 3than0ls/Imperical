@@ -34,7 +34,7 @@ class Archive(commands.Cog):
         await channel.edit(category=category, topic=topic, overwrites={ctx.guild.default_role: discord.PermissionOverwrite()})
         # allow view message perms to @everyone role and move it to given category
 
-        await ctx.send(responses['success'].format(channel=channel.mention, category_name=category.name))
+        await ctx.send(responses['success'].format(channel=channel.mention))
 
     @Checks.permissions_check()
     @commands.command(aliases=['hide'])

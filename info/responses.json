@@ -148,7 +148,7 @@
     },
     "archive": {
         "archive": {
-            "success": "Archived channel {channel} in `{category_name}`.",
+            "success": "Archived channel {channel}.",
             "error": {
                 "missing_channel": "Missing required parameter `channel`. Please give the channel to be archived.",
                 "invalid_category_name": "{category_name} is not a existing category name.",
@@ -156,7 +156,7 @@
             }
         },
         "reopen": {
-            "success": "Re-opened channel {channel} in `{category_name}`.",
+            "success": "Re-opened channel {channel}.",
             "error": {
                 "missing_channel": "Missing required parameter `channel`. Please give the channel to be reopened.",
                 "invalid_category_name": "{category_name} is not a existing category name.",
