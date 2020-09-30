@@ -79,7 +79,7 @@
             "success": "Deleted {name} from list of profiles.",
             "error": {
                 "missing_profile": "Missing required parameter `profile`. Please give the name of the profile to be deleted.",
-                "invalid_profile": "Profile {name} was not found in list of profiles."
+                "invalid_profile": "Profile {profile} was not found in list of profiles."
             }
         },
         "assign_profile": {

@@ -22,6 +22,7 @@ class CommandErrorHandler(commands.Cog, command_attrs=dict(hidden=True)):
         
         if isinstance(error, ignored):
             return
+        
         elif isinstance(error, KeyError):
             command = self.client.get_command(ctx.invoked_with)
             responses = get_responses()[command.cog.qualified_name.lower()][command.name]
@@ -39,9 +40,9 @@ class CommandErrorHandler(commands.Cog, command_attrs=dict(hidden=True)):
                     
                 elif isinstance(error, commands.BadArgument):
                     if len(error.args) == 1:
-                        message = responses["error"][f"{error.args[0]}"]
+                        message = responses["error"][error.args[0]]
                     elif len(error.args) == 2:
-                        message = responses["error"][f"invalid_{error.args[1]}"].format(format(error.args[1], 'single_code'))
+                        message = responses["error"][error.args[1]].format(profile=format(error.args[0], 'single_code'))
 
                 elif isinstance(error, discord.Forbidden):
                     message = responses["error"]['forbidden']
