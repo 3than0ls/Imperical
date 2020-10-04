@@ -10,9 +10,6 @@ from checks import Checks
 
 
 class Profile(commands.Cog):
-    def __init__(self):
-        self.update_responses()
-
     def update_responses(self):
         with open("info/responses.json", "r") as f:
             self.responses = json.load(f)
@@ -36,7 +33,7 @@ class Profile(commands.Cog):
 
     @commands.command(aliases=['profiles', 'all_profiles', 'listprofiles'])
     async def list_profiles(self, ctx):
-        self.update_responses()
+        # self.update_responses()
         responses = self.responses['profile']['list_profiles']
 
         guild_id = str(ctx.guild.id)
@@ -56,7 +53,7 @@ class Profile(commands.Cog):
 
     @commands.command(aliases=['profile_roles', 'profileinfo'])
     async def profile_info(self, ctx, profile: str):
-        self.update_responses()
+        # self.update_responses()
         responses = self.responses['profile']['profile_info']
         guild_id = str(ctx.guild.id)
         profiles = get_servers_data()[guild_id]['profiles']
@@ -82,7 +79,7 @@ class Profile(commands.Cog):
     @Checks.permissions_check()
     @commands.command(aliases=['create', 'make_profile', 'createprofile'])
     async def create_profile(self, ctx, name: str, *role_sources: commands.Greedy[typing.Union[discord.Member, discord.Role]]):
-        self.update_responses()
+        # self.update_responses()
         responses = self.responses['profile']['create_profile']
 
         # get a list of the roles the user wants to add to this newly created profile
@@ -121,7 +118,7 @@ class Profile(commands.Cog):
     @Checks.permissions_check()
     @commands.command(aliases=['delete', 'remove_profile', 'remove', 'deleteprofile'])
     async def delete_profile(self, ctx, profile: str):
-        self.update_responses()
+        # self.update_responses()
         responses = self.responses['profile']['delete_profile']
 
         guild_id = str(ctx.guild.id)
@@ -140,7 +137,7 @@ class Profile(commands.Cog):
     @Checks.permissions_check()
     @commands.command(aliases=['profile', 'assign', 'give', 'assignprofile'])
     async def assign_profile(self, ctx, profile: str, *members: commands.Greedy[discord.Member]):
-        self.update_responses()
+        # self.update_responses()
         responses = self.responses['profile']['assign_profile']
 
         if not members:
@@ -190,7 +187,7 @@ class Profile(commands.Cog):
     @Checks.permissions_check()
     @commands.command(aliases=['strip', 'removeroles'])
     async def remove_roles(self, ctx, *members: commands.Greedy[discord.Member]):
-        self.update_responses()
+        # self.update_responses()
         responses = self.responses['profile']['remove_roles']
         if not members:
             raise commands.BadArgument("invalid_members")
