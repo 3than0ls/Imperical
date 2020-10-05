@@ -10,6 +10,9 @@ from checks import Checks
 
 
 class Profile(commands.Cog):
+    def __init__(self):
+        self.update_responses()
+
     def update_responses(self):
         with open("info/responses.json", "r") as f:
             self.responses = json.load(f)
