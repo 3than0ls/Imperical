@@ -7,7 +7,7 @@ from utils import embed_template, format, get_servers_data, set_servers_data, gu
 from checks import Checks
 
 # TODO: profile_server command, creating profiles for every member with an optional argumemt of min amount of roles in order to create a profile
-
+# BUG: when a profile is assigned and it doesnt exist, no error is thrown/sent
 
 class Profile(commands.Cog):
     def __init__(self):
@@ -143,48 +143,50 @@ class Profile(commands.Cog):
         # self.update_responses()
         responses = self.responses['profile']['assign_profile']
 
-        if not members:
-            raise commands.BadArgument("invalid_members")
+        if not profile:
+            raise commands.BadArgument('missing_profile')
 
         # make default member author
         guild_id = str(ctx.guild.id)
         role_ids = self.get_profile(guild_id, profile)
+        if not role_ids:
+            raise commands.BadArgument(profile, "invalid_profile")
+
+        if not members:
+            raise commands.BadArgument("invalid_members")
 
         message = ""
 
-        if role_ids:
-            member_names = [member.name for member in members]
-            await ctx.send(responses["starting"].format(user=', '.join(member_names), profile=format(profile, "single_code")))
-            # create list of role objects from list of role ids
-            roles = [discord.utils.get(ctx.guild.roles, id=role_id) for role_id in role_ids]
-            amount = 0 # tracks how many roles will be added (may be different than the amount that member has)
-            for member in members:
-                # clear/wipes members previous roles that they may have had
-                member_roles = self.filter_everyone_role(member.roles)
-                roles_to_be_removed = filter(lambda role: role not in roles, member_roles)
-                await member.remove_roles(*roles_to_be_removed)
+        member_names = [member.name for member in members]
+        await ctx.send(responses["starting"].format(user=', '.join(member_names), profile=format(profile, "single_code")))
+        # create list of role objects from list of role ids
+        roles = [discord.utils.get(ctx.guild.roles, id=role_id) for role_id in role_ids]
+        amount = 0 # tracks how many roles will be added (may be different than the amount that member has)
+        for member in members:
+            # clear/wipes members previous roles that they may have had
+            member_roles = self.filter_everyone_role(member.roles)
+            roles_to_be_removed = filter(lambda role: role not in roles, member_roles)
+            await member.remove_roles(*roles_to_be_removed)
 
-                roles_to_be_added = []
-                for i, role in enumerate(roles):
-                    if role is not None:
-                        if role not in member.roles:
-                            roles_to_be_added.append(role)
-                            amount += 1
-                    else:
-                        not_found_role_id = role_ids[i]
-                        self.remove_profile_role(guild_id, int(not_found_role_id), profile)
-                        message += f"{responses['remove'].format(not_found_role_id=format(role_ids[i], 'single_code'))}\n"
-                if not roles_to_be_added:
-                    message += f"{responses['already_has'].format(user=member.name, profile=format(profile, 'single_code'))}\n"
+            roles_to_be_added = []
+            for i, role in enumerate(roles):
+                if role is not None:
+                    if role not in member.roles:
+                        roles_to_be_added.append(role)
+                        amount += 1
                 else:
-                    await member.add_roles(*roles_to_be_added)
-                    message += f"{responses['success'].format(profile=format(profile, 'single_code'), mention=member.name)}\n"
-                    
-            if len(members) == 1 and roles_to_be_added:  # only send if a profile was assigned to one member
-                message += f"{responses['assigned_total'].format(amount=format(amount, 'bold'), mention=member.name)}\n"
-            await ctx.send(message)
-        else:
-            raise commands.BadArgument(profile, "invalid_profile")
+                    not_found_role_id = role_ids[i]
+                    self.remove_profile_role(guild_id, int(not_found_role_id), profile)
+                    message += f"{responses['remove'].format(not_found_role_id=format(role_ids[i], 'single_code'))}\n"
+            if not roles_to_be_added:
+                message += f"{responses['already_has'].format(user=member.name, profile=format(profile, 'single_code'))}\n"
+            else:
+                await member.add_roles(*roles_to_be_added)
+                message += f"{responses['success'].format(profile=format(profile, 'single_code'), mention=member.name)}\n"
+                
+        if len(members) == 1 and roles_to_be_added:  # only send if a profile was assigned to one member
+            message += f"{responses['assigned_total'].format(amount=format(amount, 'bold'), mention=member.name)}\n"
+        await ctx.send(message)
 
 
     @Checks.permissions_check()
