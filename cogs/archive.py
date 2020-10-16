@@ -67,4 +67,4 @@ class Archive(commands.Cog):
         }
         await channel.edit(category=category, topic=topic, overwrites=perm_overwrites)
 
-        await ctx.send(responses['success'].format(channel=channel.mention, category_name=category.name))
+        await ctx.send(responses['success'].format(channel=channel.mention))
