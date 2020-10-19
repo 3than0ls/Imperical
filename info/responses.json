@@ -72,7 +72,7 @@
             "replace": "Profile {name} already exists, and will be replaced.",
             "error": {
                 "missing_name": "Missing required parameter `name`. Please give a name to create a profile.",
-                "missing_role_source": "No valid role sources were provided, so no profile was created."
+                "invalid_role_sources": "No valid role sources were provided, so no profile was created."
             }
         },
         "delete_profile": {

@@ -53,6 +53,6 @@ class CommandErrorHandler(commands.Cog, command_attrs=dict(hidden=True)):
             except KeyError:
                 command = self.client.get_command(ctx.invoked_with)
                 responses = get_responses()[command.cog.qualified_name.lower()][command.name]
-                embed = embed_template(title="An internal responder message error has occured", description=f"Missing responder `{error.args[0]}` for command `command.name`")
+                embed = embed_template(title="An internal responder message error has occured", description=f"Missing responder `{error.args[0]}` for command `{command.name}`")
                 embed.color = 15138816
                 return await ctx.send(content=None, embed=embed)

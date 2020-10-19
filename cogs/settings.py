@@ -58,7 +58,7 @@ class Settings(commands.Cog):
         )
         
 
-        embed.add_field(name="Bot prefix", value=prefix, inline=True)
+        embed.add_field(name="Bot prefix", value=f'`{prefix}`', inline=True)
         embed.add_field(name="Number of profiles", value=number_of_profiles, inline=True)
         embed.add_field(name="Permission type", value=permission_type, inline=True)
         if permission_type == "custom":
@@ -72,7 +72,7 @@ class Settings(commands.Cog):
         embed.add_field(name="Jail role", value=jail_role)
         embed.add_field(name="Jail channel", value=jail_channel)
 
-        await ctx.send(content=content, embed=embed)
+        await ctx.send(content=None, embed=embed)
 
 
     

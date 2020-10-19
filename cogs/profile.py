@@ -7,7 +7,6 @@ from utils import embed_template, format, get_servers_data, set_servers_data, gu
 from checks import Checks
 
 # TODO: profile_server command, creating profiles for every member with an optional argumemt of min amount of roles in order to create a profile
-# BUG: when a profile is assigned and it doesnt exist, no error is thrown/sent
 
 class Profile(commands.Cog):
     def __init__(self):
@@ -41,8 +40,43 @@ class Profile(commands.Cog):
 
         guild_id = str(ctx.guild.id)
         profiles = get_servers_data()[guild_id]['profiles']
-        number_of_profiles = len(profiles)
+        
+        fields = []
+        for profile_name, profile_roles in profiles.items():
+            fields.append({'name': profile_name, 'value': len(profile_roles)})
 
+        fields.sort(key=lambda f: f['name'])
+
+        num_profiles = len(fields)
+        num_embeds = num_profiles // 25 # 25 is the max num fields per embed
+        slices = []
+        if num_embeds != 0:
+            leftover = len(fields) - (num_embeds * 25)
+            for i in range(num_embeds):
+                start = i*25
+                stop = (i+1)*25
+                slices.append(slice(start, stop))
+            if leftover:
+                slices.append(slice(stop, stop+leftover))
+        else:
+            slices.append(slice(0, len(fields)))
+
+        for slice_ in slices:
+            embed = embed_template(
+                title=responses['embed_data']['title'].format(name=ctx.guild.name),
+                description=responses['embed_data']['description'].format(name=ctx.guild.name, number=format(num_profiles, "bold"), prefix=ctx.prefix)
+            )
+            embed_fields = fields[slice_]
+            if embed_fields:
+                for field in embed_fields:
+                    embed.add_field(name=field['name'], value=f"{format(field['value'], 'bold')} total roles.", inline=True)
+            else:
+                embed.add_field(name="\a", value='There are no responders')
+            await ctx.send(embed=embed)
+
+
+        # BUG: if there's more than 25, than it isn't shown, loop through yk  the drill plsz
+        '''
         embed = embed_template(
             title=responses['embed_data']['title'].format(name=ctx.guild.name),
             description=responses['embed_data']['description'].format(name=ctx.guild.name, number=format(number_of_profiles, "bold"), prefix=ctx.prefix)
@@ -52,7 +86,7 @@ class Profile(commands.Cog):
         for profile_name, role_ids in profiles.items():
             embed.add_field(name=profile_name, value=f"{format(len(role_ids), 'bold')} total roles.")
 
-        await ctx.send(content=content, embed=embed)
+        await ctx.send(content=content, embed=embed)'''
 
     @commands.command(aliases=['profile_roles', 'profileinfo'])
     async def profile_info(self, ctx, profile: str):
