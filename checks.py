@@ -27,6 +27,7 @@ class Checks:
                     title=responses['embed_data']['title'].format(command=ctx.invoked_with),
                     description=responses['embed_data']['description'].format(permission_type=permission_type)
                 )
+                embed.color = 15138816
                 await ctx.send(content=responses['content'], embed=embed)
         return commands.check(predicate)
 
@@ -45,6 +46,7 @@ class Checks:
                     title=responses['embed_data']['title'].format(command=ctx.invoked_with),
                     description=responses['embed_data']['description'].format(command=ctx.invoked_with, permission_type=permission_type, prefix=ctx.prefix)
                 )
+                embed.color = 15138816
                 await ctx.send(content=responses['content'], embed=embed)
         return commands.check(predicate)
 
@@ -62,6 +64,7 @@ class Checks:
                     title=responses['embed_data']['title'].format(command=ctx.invoked_with),
                     description=responses['embed_data']['description'].format(command=ctx.invoked_with, prefix=ctx.prefix)
                 )
+                embed.color = 15138816
                 await ctx.send(content=responses['content'], embed=embed)
         return commands.check(predicate)
             

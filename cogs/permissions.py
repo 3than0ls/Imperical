@@ -40,7 +40,7 @@ class Permissions(commands.Cog):
             if permission_type == 'custom':
                 update_setting(guild_id, 'custom_has_permission', [])
             update_setting(guild_id, 'permission_type', new_permission_type)
-            ctx.send(responses['success'].format(permission_type=format(permission_type, "single_code"), new_permission_type=format(new_permission_type, "single_code")))
+            await ctx.send(responses['success'].format(permission_type=format(permission_type, "single_code"), new_permission_type=format(new_permission_type, "single_code")))
         else:
             raise commands.BadArgument(permission_type, "invalid_permission_type")
 
