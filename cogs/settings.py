@@ -66,7 +66,10 @@ class Settings(commands.Cog):
             users = []
             for user_id in user_ids:
                 user_obj = discord.utils.get(ctx.guild.members, id=user_id)
-                users.append(f"{user_obj.name}#{user_obj.discriminator}")
+                if user_obj is not None:
+                    users.append(f"{user_obj.name}#{user_obj.discriminator}")
+                else:
+                    users.append(str(user_id))
             users.append(f"{ctx.guild.owner.name}#{ctx.guild.owner.discriminator} (server owner)")
             embed.add_field(name="Custom permission access", value=', '.join(users))
         embed.add_field(name="Jail role", value=jail_role)

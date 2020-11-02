@@ -31,8 +31,10 @@
     },
     "493987865035014144": {
         "prefix": "-",
-        "permission_type": "manage_server",
-        "custom_has_permission": [],
+        "permission_type": "custom",
+        "custom_has_permission": [
+            192756442640547840
+        ],
         "profiles": {
             "jerry": [
                 743363458325807157,
