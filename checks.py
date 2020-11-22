@@ -12,7 +12,7 @@ class Checks:
             guild_data = get_servers_data()[guild_id]
             permission_type = guild_data["permission_type"]
             author_perms = ctx.message.author.guild_permissions
-            if ctx.message.author.id == ctx.guild.owner.id or ctx.message.author.id in get_config()['has_access'] or permission_type == "everyone":
+            if ctx.message.author.id == ctx.guild.owner_id or ctx.message.author.id in get_config()['has_access'] or permission_type == "everyone":
                 return True
             elif permission_type == "administrator" or permission_type == "manage_server":
                 if getattr(author_perms, permission_type, False):

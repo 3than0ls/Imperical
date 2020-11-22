@@ -105,9 +105,10 @@ class Profile(commands.Cog):
             field = ""
             for role_id in profile_roles:
                 role = discord.utils.get(ctx.guild.roles, id=role_id)
-                field += f"{role.mention}, "
                 if role is None:
                     self.remove_profile_role(guild_id, role_id, profile)
+                else:
+                    field += f"{role.mention}, "
             field = field.rstrip(', ')
             embed.add_field(name="Roles:", value=field)
             await ctx.send(content=content, embed=embed)
