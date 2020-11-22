@@ -31,7 +31,7 @@ class Bot:
         self.client.add_cog(Profile())
         self.client.add_cog(Jail())
         self.client.add_cog(Archive())
-        self.client.add_cog(CommandErrorHandler(self.client))
+        # self.client.add_cog(CommandErrorHandler(self.client))
         self.client.run(token)
         
 
