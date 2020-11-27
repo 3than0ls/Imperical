@@ -18,7 +18,7 @@ def format(text, *styles):
         message = formats[style].format(text=message)
     return message
 
-PROFILES_PATH = 'servers/servers.json'
+PROFILES_PATH = 'servers.json'
 def get_servers_data():
     with open(PROFILES_PATH, 'r') as f:
         data = json.load(f)

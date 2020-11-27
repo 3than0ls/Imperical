@@ -1,7 +1,6 @@
 logs/
-servers/
+servers.json
 config.json
-Procfile
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
