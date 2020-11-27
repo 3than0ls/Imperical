@@ -12,9 +12,6 @@ from client import Client
 from utils import get_servers_data, get_config
 import logging
 
-# BUG: sometimes error response doesn't work
-# BUG: profiles cmd doesn't show all profiles when updated
-
 class Bot:
     def __init__(self):
         self.servers = get_servers_data()
@@ -31,7 +28,7 @@ class Bot:
         self.client.add_cog(Profile())
         self.client.add_cog(Jail())
         self.client.add_cog(Archive())
-        # self.client.add_cog(CommandErrorHandler(self.client))
+        self.client.add_cog(CommandErrorHandler(self.client))
         self.client.run(token)
         
 

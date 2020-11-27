@@ -6,8 +6,6 @@ import typing
 from utils import embed_template, format, get_servers_data, set_servers_data, guild_exists
 from checks import Checks
 
-# TODO: profile_server command, creating profiles for every member with an optional argumemt of min amount of roles in order to create a profile
-
 class Profile(commands.Cog):
     def __init__(self):
         self.update_responses()
