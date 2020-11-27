@@ -1,6 +1,13 @@
 # Imperical
 Discord bot that has uncommon but handy functions.
 
+# Key features:
+1) Create and assign groups of roles (known as profiles) to users.
+2) Create a jail channel and jail users to restrict them to only type and see that channel.
+3) Archive (or re-open) old channels that contain messages you want to save and not delete.
+
+# Setting up
+
 Due to how small it is, it lacks an actual database and instead uses .json files to store data and act as a database. It also utilizes a config.json file.
 
 To start, create a `config.json` file in the root folder and copy and paste this and fill out values accordingly.
